@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "681277496146",
+    "project_id": "course-scheduler-1a8d3",
+    "storage_bucket": "course-scheduler-1a8d3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:681277496146:android:250a3e7bd9e424659d388b",
+        "android_client_info": {
+          "package_name": "com.example.course_scheduler"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByVYDhSHUl3uf7rAt8LhzEv66pjNNJa1M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:681277496146:android:f71778dfa01544e39d388b",
+        "android_client_info": {
+          "package_name": "com.scheduler.course_scheduler"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByVYDhSHUl3uf7rAt8LhzEv66pjNNJa1M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
