@@ -1,3 +1,5 @@
+import 'package:course_scheduler/src/services/auth.dart';
+import 'package:course_scheduler/src/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,43 +12,87 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-
+  String? email;
+  String? password;
+  bool obscure = true;
+  final AuthServices _auth = AuthServices();
+  String error='';
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       const Text(
         "Sing In",
-        style: TextStyle(color: Colors.white70, fontSize: 40),
+        style: TextStyle(color: AppColors.mainWhite, fontSize: 40),
       ),
       Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
               TextFormField(
+                validator: (val) =>
+                    val.toString().isEmpty ? "Email cannot be empty" : null,
+                onChanged: (val) {
+                  setState(() {
+                    email = val;
+                  });
+                },
                 decoration: const InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white60, width: 2.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 2.0),
-                  ),
                 ),
               ),
               const SizedBox(height: 20),
               TextFormField(
-                decoration: const InputDecoration(
+                obscureText: obscure,
+                validator: (val) => val.toString().length > 6
+                    ? null
+                    : "Password has to be more than 6 characters",
+                onChanged: (val) {
+                  setState(() {
+                    password = val;
+                  });
+                },
+                decoration: InputDecoration(
+                  suffix: InkWell(
+                      onTap: () {
+                        setState(() {
+                          obscure = !obscure;
+                        });
+                      },
+                      child: const Icon(
+                        Icons.remove_red_eye,
+                      )),
                   labelText: 'Password',
-                  border: UnderlineInputBorder(),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 2.0),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.purple, width: 2.0),
-                  ),
+                  border: const OutlineInputBorder(),
                 ),
               ),
+            ],
+          )),
+      const SizedBox(
+        height: 30,
+      ),
+      error==""?const SizedBox():Text(error,style: const TextStyle(color: Colors.redAccent,fontSize: 15),),
+      TextButton(
+          onPressed: () async{
+            if (_formKey.currentState!.validate()) {
+              dynamic result = await _auth.signIn(email!, password!);
+              if (result == null) {
+                error="Please use valid credentials";
+              }else{
+                error='';
+              }
+            }
+          },
+          child: const Column(
+            children: [
+              Text(
+                "Sing In",
+                style: TextStyle(fontSize: 25),
+              ),Row(
+                children: [
+                  Text("don't have an account? ",style: TextStyle(color: AppColors.mainWhite),),
+                ],
+              )
             ],
           ))
     ]);
