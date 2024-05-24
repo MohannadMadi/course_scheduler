@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:course_scheduler/src/services/auth.dart';
 import 'package:course_scheduler/src/utils/colors.dart';
+import 'package:course_scheduler/src/view/authintication/signUpPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -16,13 +19,16 @@ class _LoginPageState extends State<LoginPage> {
   String? password;
   bool obscure = true;
   final AuthServices _auth = AuthServices();
-  String error='';
+
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       const Text(
         "Sing In",
-        style: TextStyle(color: AppColors.mainWhite, fontSize: 40),
+        style: TextStyle(color: AppColors.mainTextColor, fontSize: 40),
+      ),
+      const SizedBox(
+        height: 70,
       ),
       Form(
           key: _formKey,
@@ -41,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
                   border: OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
               TextFormField(
                 obscureText: obscure,
                 validator: (val) => val.toString().length > 6
@@ -61,6 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       child: const Icon(
                         Icons.remove_red_eye,
+                        color: AppColors.mainBlue,
                       )),
                   labelText: 'Password',
                   border: const OutlineInputBorder(),
@@ -71,30 +78,71 @@ class _LoginPageState extends State<LoginPage> {
       const SizedBox(
         height: 30,
       ),
-      error==""?const SizedBox():Text(error,style: const TextStyle(color: Colors.redAccent,fontSize: 15),),
-      TextButton(
-          onPressed: () async{
-            if (_formKey.currentState!.validate()) {
-              dynamic result = await _auth.signIn(email!, password!);
-              if (result == null) {
-                error="Please use valid credentials";
-              }else{
-                error='';
+      Column(
+        children: [
+          InkWell(
+            onTap: () async {
+              if (_formKey.currentState!.validate()) {
+                dynamic result = await _auth.signIn(email!, password!);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                      content: Row(
+                        children: [
+                          Icon(
+                            result == null?Icons.error_outline:Icons.check,
+                            color: result == null?AppColors.errorRed:AppColors.successGreen,
+                          ),
+                          Text( result == null?"  Please use valid credentials":"Signed In successfully",
+                              style: TextStyle(
+                                  color:result == null? AppColors.errorRed:AppColors.successGreen, fontSize: 15)),
+                        ],
+                      ),
+                      backgroundColor: AppColors.subBlack,
+                    ),
+                  );
+
+
+
               }
-            }
-          },
-          child: const Column(
-            children: [
-              Text(
+            },
+            child: Container(
+              alignment: Alignment.center,
+              width: 150,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: AppColors.mainButtonColor),
+              child: const Text(
                 "Sing In",
-                style: TextStyle(fontSize: 25),
-              ),Row(
-                children: [
-                  Text("don't have an account? ",style: TextStyle(color: AppColors.mainWhite),),
-                ],
+                style: TextStyle(fontSize: 25, color: AppColors.mainTextColor),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "don't have an account?  ",
+                style: TextStyle(color: AppColors.mainTextColor),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const SignUpPage()));
+                },
+                child: const Text(
+                  "Sign Up instead",
+                  style: TextStyle(color: AppColors.subTextColor),
+                  // style: TextStyle(color: ),
+                ),
               )
             ],
-          ))
+          )
+        ],
+      )
     ]);
   }
 }

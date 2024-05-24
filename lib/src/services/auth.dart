@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -21,9 +23,9 @@ class AuthServices {
       return _userFromFirebaseUser(result.user);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        debugPrint('No user found for that email.');
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided.');
+        debugPrint('Wrong password provided.');
       }
       return null;
     }
@@ -42,7 +44,9 @@ class AuthServices {
       return null;
     }
   }
-
+Stream<CustomUser?> get user{
+    return _auth.authStateChanges().map((User? user)=>user!=null?CustomUser(uid: user!.uid):null);
+}
   // Sign out
   Future signOut() async {
     try {
