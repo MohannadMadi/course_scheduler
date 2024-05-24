@@ -1,4 +1,5 @@
 import 'package:course_scheduler/src/providers/userProvider.dart';
+import 'package:course_scheduler/src/view/authintication/authinticate.dart';
 import 'package:course_scheduler/src/view/authintication/loginPage.dart';
 import 'package:course_scheduler/src/view/homePage/home.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,6 +19,6 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     final user =Provider.of<CustomUser?>(context);
 
-    return user==null?LoginPage():HomePage();
+    return user==null?Authinticate():HomePage();
   }
 }

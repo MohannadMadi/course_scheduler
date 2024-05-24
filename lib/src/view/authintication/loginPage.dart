@@ -7,7 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  Function toggle;
+    LoginPage({super.key,required this.toggle});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -130,9 +131,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const SignUpPage()));
-                },
+                widget.toggle();
+                  },
                 child: const Text(
                   "Sign Up instead",
                   style: TextStyle(color: AppColors.subTextColor),
