@@ -21,12 +21,16 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final courses = Provider.of<List<Course?>?>(context);
+    final _auth = AuthServices();
 
     return Scaffold(
         backgroundColor: AppColors.mainBlack,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            FloatingActionButton(onPressed: () {
+              _auth.signOut();
+            }),
             SearchWidget(),
             Container(
               height: MediaQuery.of(context).size.height * 0.8,
@@ -63,4 +67,4 @@ class _HomePageState extends State<HomePage> {
               //     totalSeats: 60,
               //     remainingSeats: 60,
               //   ));
-              // })
+// })

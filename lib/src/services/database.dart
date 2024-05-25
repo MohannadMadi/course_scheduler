@@ -1,20 +1,64 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:course_scheduler/src/model/course.dart';
 import 'package:course_scheduler/src/model/user.dart';
 
 class DatabaseServices {
-  final String? uid;
-  DatabaseServices({this.uid});
+  DatabaseServices() {}
 
   final CollectionReference usersColletion =
       FirebaseFirestore.instance.collection("users");
   final CollectionReference coursesColletion =
       FirebaseFirestore.instance.collection("courses");
-  Future updateUserData(String name, String email, int maxCredits) async {
+
+  Future updateUserData(String name, String email, int maxCredits,
+      List<Course> coursesInCart, int takenCredits, String uid) async {
     return await usersColletion.doc(uid).set({
       'name': name,
       'email': email,
       'maxCredits': maxCredits,
+      'coursesInCart': coursesInCart,
+      'takenCredits': takenCredits,
+    });
+  }
+
+  Future addCourseToUser(Course course, String uid) async {
+    await usersColletion.doc(uid).update({
+      'coursesInCart': FieldValue.arrayUnion([course.toMap()]),
+    });
+    await usersColletion.doc(uid).update({
+      'takenCredits': FieldValue.increment(course.numberOfCredits!),
+    });
+
+    await addUserToCourse(course.courseId!, uid);
+  }
+
+  Future removeCourseFromUser(Course course, String uid) async {
+    await usersColletion.doc(uid).update({
+      'coursesInCart': FieldValue.arrayRemove([course.toMap()]),
+    });
+    await usersColletion.doc(uid).update({
+      'takenCredits': FieldValue.increment(-course.numberOfCredits!),
+    });
+    await removeUserFromCourse(course.courseId!, uid);
+  }
+
+  Future addUserToCourse(String courseId, String uid) async {
+    await coursesColletion.doc(courseId).update({
+      'users': FieldValue.arrayUnion([uid]),
+    });
+    coursesColletion.doc(courseId).update({
+      'remainingSeats': FieldValue.increment(-1),
+    });
+  }
+
+  Future removeUserFromCourse(String courseId, String uid) async {
+    await coursesColletion.doc(courseId).update({
+      'users': FieldValue.arrayRemove([uid]),
+    });
+    coursesColletion.doc(courseId).update({
+      'remainingSeats': FieldValue.increment(1),
     });
   }
 
@@ -69,7 +113,7 @@ class DatabaseServices {
         secNumber: data['secNumber'] ?? '',
         subType: data['subType'] ?? '',
         instructor: data['instructor'] ?? '',
-        users: List<CustomUser>.from(data['users'] ?? []),
+        users: List<String>.from(data['users'] ?? []),
         location: data['location'] ?? '',
         description: data['description'] ?? '',
         startTime:

@@ -19,6 +19,8 @@ class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   String? email;
   String? password;
+  String? userName;
+
   bool obscure = true;
   final AuthServices _auth = AuthServices();
 
@@ -36,6 +38,20 @@ class _SignUpPageState extends State<SignUpPage> {
           key: _formKey,
           child: Column(
             children: <Widget>[
+              TextFormField(
+                validator: (val) =>
+                    val.toString().isEmpty ? "UserName cannot be empty" : null,
+                onChanged: (val) {
+                  setState(() {
+                    userName = val;
+                  });
+                },
+                decoration: const InputDecoration(
+                  labelText: 'UserName',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 40),
               TextFormField(
                 validator: (val) =>
                     val.toString().isEmpty ? "Email cannot be empty" : null,
@@ -85,7 +101,8 @@ class _SignUpPageState extends State<SignUpPage> {
           InkWell(
             onTap: () async {
               if (_formKey.currentState!.validate()) {
-                dynamic result = await _auth.signUp(email!, password!);
+                dynamic result =
+                    await _auth.signUp(userName!, email!, password!);
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -137,7 +154,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               InkWell(
                 onTap: () {
-                widget.toggle();
+                  widget.toggle();
                 },
                 child: const Text(
                   "Sign In instead",
