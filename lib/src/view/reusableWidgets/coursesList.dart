@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:course_scheduler/src/view/homePage/components/courseButton.dart';
+import 'package:course_scheduler/src/view/reusableWidgets/courseButton.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:course_scheduler/src/model/course.dart';

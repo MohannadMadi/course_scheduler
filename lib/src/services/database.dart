@@ -128,4 +128,60 @@ class DatabaseServices {
   Stream<List<Course>> get courses {
     return coursesColletion.snapshots().map(_courseListFromSnapshot);
   }
+
+  Future<UserData?> getUserById(String uid) async {
+    try {
+      DocumentSnapshot snapshot = await usersColletion.doc(uid).get();
+      if (snapshot.exists) {
+        Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+        print(data['takenCredits'].runtimeType);
+
+        return UserData(
+          name: data['name'] ?? '',
+          email: data['email'] ?? '',
+          maxCredits: data['maxCredits'] ?? 0,
+          coursesInCart: _courseListFromMap(data['coursesInCart']),
+          takenCredits: data['takenCredits'].toInt() ?? 0,
+        );
+      } else {
+        return null; // User not found
+      }
+    } catch (e) {
+      print("Error getting user by ID: $e");
+      return null;
+    }
+  }
+
+  List<Course> _courseListFromMap(List<dynamic>? coursesData) {
+    if (coursesData == null) return [];
+    return coursesData.map((courseData) {
+      print(_toDateTime(courseData['endTime']));
+      return Course(
+        courseId: courseData['courseId'] ?? '',
+        courseName: courseData['courseName'] ?? '',
+        numberOfCredits: courseData['numberOfCredits'] ?? 0,
+        totalSeats: courseData['totalSeats'] ?? 0,
+        remainingSeats: courseData['remainingSeats'] ?? 0,
+        secNumber: courseData['secNumber'] ?? '',
+        subType: courseData['subType'] ?? '',
+        instructor: courseData['instructor'] ?? '',
+        users: List<String>.from(courseData['users'] ?? []),
+        location: courseData['location'] ?? '',
+        description: courseData['description'] ?? '',
+        startTime: _toDateTime((courseData['startTime'])),
+        endTime: _toDateTime((courseData['endTime'])),
+        registered: courseData['registered'] ?? false,
+        denied: courseData['denied'] ?? false,
+      );
+    }).toList();
+  }
+
+  DateTime? _toDateTime(dynamic value) {
+    if (value is Timestamp) {
+      return value.toDate();
+    } else if (value is int) {
+      return DateTime.fromMillisecondsSinceEpoch(value);
+    }
+    return null;
+  }
 }

@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:course_scheduler/firebase_options.dart';
 import 'package:course_scheduler/src/model/course.dart';
 import 'package:course_scheduler/src/model/user.dart';
+import 'package:course_scheduler/src/providers/navbarProvider.dart';
+import 'package:course_scheduler/src/providers/userDataProvider.dart';
 import 'package:course_scheduler/src/services/auth.dart';
 import 'package:course_scheduler/src/services/database.dart';
 import 'package:course_scheduler/src/utils/colors.dart';
@@ -14,6 +16,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => NavbarProvider()),
+    ChangeNotifierProvider(create: (context) => UserDataProvider()),
     StreamProvider<List<Course?>?>.value(
       value: DatabaseServices().courses,
       initialData: null,
@@ -32,6 +36,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DatabaseServices();
+    // AuthServices _auth = AuthServices();
+    // _auth.signOut();
     return MaterialApp(
       theme: ThemeData.from(
           colorScheme: ColorScheme.dark(background: AppColors.mainBlack)),

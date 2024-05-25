@@ -1,10 +1,13 @@
 import 'dart:async';
 
+import 'package:course_scheduler/src/model/user.dart';
+import 'package:course_scheduler/src/providers/userDataProvider.dart';
 import 'package:course_scheduler/src/services/auth.dart';
 import 'package:course_scheduler/src/utils/colors.dart';
 import 'package:course_scheduler/src/view/authintication/signUpPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SignUpPage extends StatefulWidget {
   Function toggle;
@@ -23,6 +26,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   bool obscure = true;
   final AuthServices _auth = AuthServices();
+  // final  _auth = AuthServices();
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +107,8 @@ class _SignUpPageState extends State<SignUpPage> {
               if (_formKey.currentState!.validate()) {
                 dynamic result =
                     await _auth.signUp(userName!, email!, password!);
-
+                UserData? userData = await _db.getUserById(result!.uid);
+                context.read<UserDataProvider>().setUserData(userData!);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Row(

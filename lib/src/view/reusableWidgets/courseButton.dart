@@ -1,10 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:course_scheduler/src/utils/colors.dart';
-import 'package:course_scheduler/src/view/homePage/components/registration.dart';
+import 'package:course_scheduler/src/view/reusableWidgets/registration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../model/course.dart';
+import '../../model/course.dart';
 
 class CourseButton extends StatefulWidget {
   Course course;

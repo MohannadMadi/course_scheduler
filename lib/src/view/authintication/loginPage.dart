@@ -1,14 +1,18 @@
 import 'dart:async';
 
+import 'package:course_scheduler/src/model/user.dart';
+import 'package:course_scheduler/src/providers/userDataProvider.dart';
 import 'package:course_scheduler/src/services/auth.dart';
+import 'package:course_scheduler/src/services/database.dart';
 import 'package:course_scheduler/src/utils/colors.dart';
 import 'package:course_scheduler/src/view/authintication/signUpPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   Function toggle;
-    LoginPage({super.key,required this.toggle});
+  LoginPage({super.key, required this.toggle});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -20,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   String? password;
   bool obscure = true;
   final AuthServices _auth = AuthServices();
+  final DatabaseServices _db = DatabaseServices();
 
   @override
   Widget build(BuildContext context) {
@@ -84,27 +89,32 @@ class _LoginPageState extends State<LoginPage> {
           InkWell(
             onTap: () async {
               if (_formKey.currentState!.validate()) {
-                dynamic result = await _auth.signIn(email!, password!);
+                CustomUser? result = await _auth.signIn(email!, password!);
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                      content: Row(
-                        children: [
-                          Icon(
-                            result == null?Icons.error_outline:Icons.check,
-                            color: result == null?AppColors.errorRed:AppColors.successGreen,
-                          ),
-                          Text( result == null?"  Please use valid credentials":"Signed In successfully",
-                              style: TextStyle(
-                                  color:result == null? AppColors.errorRed:AppColors.successGreen, fontSize: 15)),
-                        ],
-                      ),
-                      backgroundColor: AppColors.subBlack,
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Row(
+                      children: [
+                        Icon(
+                          result == null ? Icons.error_outline : Icons.check,
+                          color: result == null
+                              ? AppColors.errorRed
+                              : AppColors.successGreen,
+                        ),
+                        Text(
+                            result == null
+                                ? "  Please use valid credentials"
+                                : "Signed In successfully",
+                            style: TextStyle(
+                                color: result == null
+                                    ? AppColors.errorRed
+                                    : AppColors.successGreen,
+                                fontSize: 15)),
+                      ],
                     ),
-                  );
-
-
-
+                    backgroundColor: AppColors.subBlack,
+                  ),
+                );
               }
             },
             child: Container(
@@ -131,8 +141,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
               InkWell(
                 onTap: () {
-                widget.toggle();
-                  },
+                  widget.toggle();
+                },
                 child: const Text(
                   "Sign Up instead",
                   style: TextStyle(color: AppColors.subTextColor),

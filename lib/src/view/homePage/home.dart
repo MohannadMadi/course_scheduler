@@ -4,7 +4,7 @@ import 'package:course_scheduler/src/services/auth.dart';
 import 'package:course_scheduler/src/services/database.dart';
 import 'package:course_scheduler/src/utils/colors.dart';
 import 'package:course_scheduler/src/view/homePage/components/bottomBar.dart';
-import 'package:course_scheduler/src/view/homePage/components/coursesList.dart';
+import 'package:course_scheduler/src/view/reusableWidgets/coursesList.dart';
 import 'package:course_scheduler/src/view/homePage/components/search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,9 +28,9 @@ class _HomePageState extends State<HomePage> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            FloatingActionButton(onPressed: () {
-              _auth.signOut();
-            }),
+            // FloatingActionButton(onPressed: () {
+            //   _auth.signOut();
+            // }),
             SearchWidget(),
             Container(
               height: MediaQuery.of(context).size.height * 0.8,
@@ -38,9 +38,6 @@ class _HomePageState extends State<HomePage> {
                 courses: courses,
               ),
             ),
-            SizedBox(
-                height: MediaQuery.of(context).size.height * 0.08,
-                child: CustomBottomBar())
           ],
         ));
   }
