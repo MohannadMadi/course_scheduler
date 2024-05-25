@@ -26,7 +26,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   bool obscure = true;
   final AuthServices _auth = AuthServices();
-  // final  _auth = AuthServices();
 
   @override
   Widget build(BuildContext context) {
@@ -107,8 +106,8 @@ class _SignUpPageState extends State<SignUpPage> {
               if (_formKey.currentState!.validate()) {
                 dynamic result =
                     await _auth.signUp(userName!, email!, password!);
-                UserData? userData = await _db.getUserById(result!.uid);
-                context.read<UserDataProvider>().setUserData(userData!);
+                // UserData? userData = await _db.getUserById(result!.uid);
+                // context.read<UserDataProvider>().setUserData(userData!);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Row(

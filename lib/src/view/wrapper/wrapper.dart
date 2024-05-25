@@ -26,24 +26,19 @@ class _WrapperState extends State<Wrapper> {
     final user = Provider.of<CustomUser?>(context);
     final _db = DatabaseServices();
     final _auth = AuthServices();
-    List pages = [
-      HomePage(),
-      // MyCourses(
-      //   courses: context.read<UserDataProvider>().userData.coursesInCart,
-      // )
-    ];
+    List pages = [HomePage(), MyCourses()];
     if (user != null) {}
     return user == null
         ? Authinticate()
         : Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              FloatingActionButton(onPressed: () async {
-                await _auth.signOut();
-                // print(
-                // context.read<UserDataProvider>().userData,
-                // );
-              }),
+              // FloatingActionButton(onPressed: () async {
+              //   await _auth.signOut();
+              //   // print(
+              //   // context.read<UserDataProvider>().userData,
+              //   // );
+              // }),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.9,
                 child: pages[context.watch<NavbarProvider>().currentIndex],
