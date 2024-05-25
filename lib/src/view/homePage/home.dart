@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:course_scheduler/src/model/course.dart';
 import 'package:course_scheduler/src/services/auth.dart';
 import 'package:course_scheduler/src/services/database.dart';
+import 'package:course_scheduler/src/utils/colors.dart';
+import 'package:course_scheduler/src/view/homePage/components/bottomBar.dart';
 import 'package:course_scheduler/src/view/homePage/components/coursesList.dart';
+import 'package:course_scheduler/src/view/homePage/components/search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,9 +23,22 @@ class _HomePageState extends State<HomePage> {
     final courses = Provider.of<List<Course?>?>(context);
 
     return Scaffold(
-        body: CoursesList(
-      courses: courses,
-    ));
+        backgroundColor: AppColors.mainBlack,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            SearchWidget(),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.8,
+              child: CoursesList(
+                courses: courses,
+              ),
+            ),
+            SizedBox(
+                height: MediaQuery.of(context).size.height * 0.08,
+                child: CustomBottomBar())
+          ],
+        ));
   }
 }
 

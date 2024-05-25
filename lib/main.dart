@@ -35,7 +35,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData.from(
           colorScheme: ColorScheme.dark(background: AppColors.mainBlack)),
-      home: Scaffold(body: Wrapper()),
+      home: SafeArea(
+          child:
+              Scaffold(backgroundColor: AppColors.mainBlack, body: Wrapper())),
     );
   }
 }

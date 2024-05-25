@@ -20,6 +20,7 @@ class Course {
   DateTime? endTime;
   bool? registered;
   bool? denied;
+  // String?dayOfWeek=DateTime.wednesday.;
   Course({
     this.courseId,
     this.courseName,
